@@ -1,0 +1,6 @@
+astropy
+pytest
+pytest-cov
+pytest-runner
+codecov
+coverage
