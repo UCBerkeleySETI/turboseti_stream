@@ -1,0 +1,34 @@
+# This workflow will install Python dependencies and run tests with a variety of Python versions
+# Reference: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Pytesting
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-verison: [3.7, 3.8, 3.9]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r requirements.txt
+          python3 -m pip install -r requirements_test.txt
+      - name: Run coverage test
+        run: |
+          export PATH=/home/runner/.local/bin:$PATH
+          python3 -m pytest --cov=./ --cov-report=xml
